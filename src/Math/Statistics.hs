@@ -116,9 +116,9 @@ pvar :: (Fractional a, Sample s) => s a -> a
 pvar xs = centralMoment xs 2
 
 -- |Returns the sum of square deviations from their sample mean.
-devsq :: (Floating a) => [a] -> a
-devsq xs = sum $ map (\x->(x-m)**2) xs
-    where m = mean xs
+devsq :: Fractional a => [a] -> a
+devsq xs = sum $ map (\x -> (x - mean xs)^2) xs
+
 
 ----------------------------------------------------------------
 -- Skewness and kurtosis 
@@ -145,7 +145,7 @@ kurt xs = (centralMoment xs 4 / (centralMoment xs 2)^2) - 3
 ----------------------------------------------------------------
 -- Median. mode, quantiles 
 
--- |Median
+-- |Median of sample 
 median :: (Fractional a, Ord a) => [a] -> a
 median x | odd n  = head  $ drop (n `div` 2) x'
          | even n = mean $ take 2 $ drop i x'
@@ -240,15 +240,15 @@ correl = pearson
 --   where the regression is /y/ = /b0/ + /b1/ * /x/ with Pearson
 --   coefficient /r/
 linreg :: (Floating b) => [(b, b)] -> (b, b, b)
-linreg xys = let !xs = map fst xys
-                 !ys = map snd xys
-                 !n = fromIntegral $ length xys
-                 !sX = sum xs
-                 !sY = sum ys
+linreg xys = let !xs  = map fst xys
+                 !ys  = map snd xys
+                 !n   = fromIntegral $ length xys
+                 !sX  = sum xs
+                 !sY  = sum ys
                  !sXX = sum $ map (^ 2) xs
                  !sXY = sum $ map (uncurry (*)) xys
                  !sYY = sum $ map (^ 2) ys
                  !alpha = (sY - beta * sX) / n
-                 !beta = (n * sXY - sX * sY) / (n * sXX - sX * sX)
-                 !r = (n * sXY - sX * sY) / (sqrt $ (n * sXX - sX^2) * (n * sYY - sY ^ 2))
+                 !beta  = (n * sXY - sX * sY) / (n * sXX - sX * sX)
+                 !r     = (n * sXY - sX * sY) / (sqrt $ (n * sXX - sX^2) * (n * sYY - sY ^ 2))
              in (alpha, beta, r)
