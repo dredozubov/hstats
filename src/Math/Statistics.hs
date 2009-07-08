@@ -191,9 +191,9 @@ iqr xs = take (length xs - 2*q) $ drop q xs
       q = ((length xs) + 1) `div` 4
 
 
--- |Arbitrary quantile q of an unsorted list.  The quantile /q/ of /N/
--- |data points is the point whose (zero-based) index in the sorted
--- |data set is closest to /q(N-1)/.
+-- | Arbitrary quantile q of an unsorted list.  The quantile /q/ of /N/
+--   data points is the point whose (zero-based) index in the sorted
+--   data set is closest to /q(N-1)/.
 quantile :: (Fractional b, Ord b) => Double -> [b] -> b
 quantile q = quantileAsc q . sort
 
