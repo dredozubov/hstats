@@ -170,7 +170,7 @@ median x | odd n  = head  $ drop (n `div` 2) x'
 
 -- |Modes returns a sorted list of modes in descending order
 modes :: (Ord a) => [a] -> [(Int, a)]
-modes xs = sortBy (comparing $ negate.fst) $ map (\x->(length x, head x)) $ (group.sort) xs
+modes = sortBy (comparing $ negate . fst) . map (\x->(length x, head x)) . group . sort
 
 -- |Mode returns the mode of the list, otherwise Nothing
 mode :: (Ord a) => [a] -> Maybe a
