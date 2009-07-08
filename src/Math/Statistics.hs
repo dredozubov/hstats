@@ -15,7 +15,7 @@
 
 module Math.Statistics ( -- * Type classes for samples
                          Sample(..)
-                       , Wgh
+                       , Wgh(..)
                        -- * Sample parameters 
                        -- ** Variants of mean
                        , harmean
