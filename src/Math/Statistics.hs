@@ -15,6 +15,7 @@
 
 module Math.Statistics ( -- * Type classes for samples
                          Sample(..)
+                       , Wgh
                        -- * Sample parameters 
                        -- ** Variants of mean
                        , harmean
@@ -86,6 +87,20 @@ instance Sample [] where
     centralMoment xs r = (sum $ map (\x -> (x-m)^r) xs) / (fromIntegral $ length xs)
         where
           m = mean xs
+
+-- | Random sample with weights.
+newtype Wgh a = Wgh [(a,a)]
+
+instance Sample Wgh where
+    -- mean
+    mean (Wgh xs) = (sum . map (uncurry (*)) $ xs) / (sum . map snd $ xs)
+    -- Variance
+    var xs = centralMoment xs 2
+    -- Central moment
+    centralMoment _ 1 = 0
+    centralMoment (Wgh xs) r = (sum $ map (\(x,w) -> w*(x - m)^r) xs) / (sum $ map snd xs)
+        where
+          m = mean (Wgh xs)
 
 
 ----------------------------------------------------------------
